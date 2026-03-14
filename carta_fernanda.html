@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Para Fernanda 💌</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+body {
+  min-height:100vh;
+  background: radial-gradient(ellipse at 30% 20%, #2d0a1a, #0d0005 70%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-family:'Georgia',serif;
+  overflow:hidden;
+  position:relative;
+}
+
+/* Stars */
+.stars { position:fixed; inset:0; pointer-events:none; }
+.star {
+  position:absolute;
+  width:2px; height:2px;
+  background:#fff;
+  border-radius:50%;
+  animation: twinkle var(--d,3s) ease-in-out infinite;
+  opacity:0;
+}
+@keyframes twinkle {
+  0%,100%{opacity:0} 50%{opacity:var(--o,.7)}
+}
+
+/* Floating petals */
+.petal {
+  position:fixed;
+  font-size:14px;
+  animation: fallPetal var(--pd,8s) linear infinite;
+  opacity:0;
+  pointer-events:none;
+  top:-20px;
+}
+@keyframes fallPetal {
+  0%   { transform:translateY(0) rotate(0deg); opacity:0; }
+  10%  { opacity:0.6; }
+  90%  { opacity:0.3; }
+  100% { transform:translateY(110vh) rotate(360deg); opacity:0; }
+}
+
+/* Main text above envelope */
+.intro {
+  color:rgba(255,220,200,0.7);
+  font-size:13px;
+  letter-spacing:0.15em;
+  margin-bottom:32px;
+  font-style:italic;
+  text-align:center;
+  animation: fadeIn 2s ease forwards;
+}
+@keyframes fadeIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── SOBRE ── */
+.envelope-wrap {
+  position:relative;
+  width:300px;
+  cursor:pointer;
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+.envelope-wrap:active { transform:scale(0.97); }
+
+.envelope-body {
+  width:300px;
+  height:200px;
+  background: linear-gradient(160deg, #fff8f0 0%, #ffe8cc 100%);
+  border-radius:4px;
+  border:1.5px solid #c89060;
+  position:relative;
+  overflow:hidden;
+  box-shadow:
+    0 12px 40px rgba(200,100,40,0.35),
+    0 2px 8px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+/* Folds decorativos en el cuerpo */
+.fold-left {
+  position:absolute;
+  top:0; left:0;
+  border-left:150px solid rgba(230,190,140,0.45);
+  border-top:100px solid transparent;
+  border-bottom:100px solid transparent;
+}
+.fold-right {
+  position:absolute;
+  top:0; right:0;
+  border-right:150px solid rgba(210,170,120,0.35);
+  border-top:100px solid transparent;
+  border-bottom:100px solid transparent;
+}
+.fold-bottom {
+  position:absolute;
+  bottom:0; left:0;
+  border-bottom:100px solid rgba(220,180,130,0.4);
+  border-left:150px solid transparent;
+  border-right:150px solid transparent;
+}
+
+/* Carta que se ve por debajo */
+.letter-preview {
+  position:absolute;
+  bottom:10px;
+  left:50%;
+  transform:translateX(-50%) translateY(0);
+  width:248px;
+  height:160px;
+  background:#fffdf5;
+  border:1px solid #e0c090;
+  border-radius:2px;
+  z-index:3;
+  transition:transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s;
+  box-shadow:0 2px 10px rgba(0,0,0,0.12);
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.letter-preview-lines { width:200px; }
+.letter-preview-lines span {
+  display:block;
+  height:1px;
+  background:rgba(160,100,40,0.2);
+  margin-bottom:12px;
+  border-radius:1px;
+}
+.letter-preview-lines span:nth-child(1){width:70%}
+.letter-preview-lines span:nth-child(2){width:100%}
+.letter-preview-lines span:nth-child(3){width:90%}
+.letter-preview-lines span:nth-child(4){width:85%}
+.letter-preview-lines span:nth-child(5){width:60%}
+
+/* Flap */
+.env-flap {
+  position:absolute;
+  top:0; left:0;
+  width:300px;
+  height:110px;
+  z-index:10;
+  transform-origin:50% 0;
+  transition:transform 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.env-flap svg { display:block; }
+
+/* Sello de cera */
+.wax-seal {
+  position:absolute;
+  bottom:-18px;
+  left:50%;
+  transform:translateX(-50%);
+  width:44px;
+  height:44px;
+  background:radial-gradient(circle at 38% 32%, #e53030, #7b0f0f);
+  border-radius:50%;
+  z-index:20;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:17px;
+  border:2px solid rgba(255,150,150,0.3);
+  box-shadow:0 3px 12px rgba(180,20,20,0.5), inset 0 -2px 4px rgba(0,0,0,0.2);
+  transition:transform 0.3s, opacity 0.4s;
+  color:#fff;
+}
+
+/* Hint text */
+.hint {
+  margin-top:40px;
+  color:rgba(255,200,170,0.65);
+  font-size:12px;
+  letter-spacing:0.2em;
+  font-style:italic;
+  animation:pulse 2s ease-in-out infinite;
+  text-align:center;
+}
+@keyframes pulse {
+  0%,100%{opacity:0.65} 50%{opacity:1}
+}
+
+/* ── ESTADO ABIERTO ── */
+.envelope-wrap.open .env-flap {
+  transform:rotateX(180deg);
+}
+.envelope-wrap.open .letter-preview {
+  transform:translateX(-50%) translateY(-175px);
+}
+.envelope-wrap.open .wax-seal {
+  opacity:0;
+  transform:translateX(-50%) scale(0.5);
+}
+
+/* ── MODAL CARTA ── */
+.modal-bg {
+  position:fixed;
+  inset:0;
+  background:rgba(10,0,5,0.75);
+  z-index:200;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.4s;
+  backdrop-filter:blur(6px);
+}
+.modal-bg.show {
+  opacity:1;
+  pointer-events:all;
+}
+
+.carta {
+  background:#fffdf7;
+  width:100%;
+  max-width:380px;
+  max-height:88vh;
+  overflow-y:auto;
+  border-radius:3px;
+  padding:36px 32px 32px;
+  position:relative;
+  box-shadow:0 24px 80px rgba(180,60,20,0.3), 0 2px 8px rgba(0,0,0,0.4);
+  transform:translateY(30px) scale(0.95);
+  transition:transform 0.4s cubic-bezier(0.34,1.4,0.64,1), opacity 0.3s;
+  opacity:0;
+  /* Líneas de cuaderno */
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0, transparent 29px,
+      rgba(180,130,90,0.13) 29px, rgba(180,130,90,0.13) 30px
+    );
+  background-position:0 68px;
+}
+.modal-bg.show .carta {
+  transform:translateY(0) scale(1);
+  opacity:1;
+}
+
+/* Banda superior tipo washi tape */
+.carta::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:5px;
+  background: repeating-linear-gradient(
+    90deg,
+    #c0392b 0, #c0392b 8px,
+    #e74c3c 8px, #e74c3c 16px
+  );
+  opacity:0.85;
+}
+
+/* Margen izquierdo */
+.carta::after {
+  content:'';
+  position:absolute;
+  left:48px; top:20px; bottom:0;
+  width:1px;
+  background:rgba(200,100,80,0.15);
+}
+
+.close-btn {
+  position:absolute;
+  top:12px; right:14px;
+  background:none;
+  border:none;
+  font-size:22px;
+  color:#c09070;
+  cursor:pointer;
+  line-height:1;
+  padding:2px 6px;
+  border-radius:4px;
+  transition:background 0.15s;
+  z-index:1;
+}
+.close-btn:hover { background:rgba(200,120,80,0.1); }
+
+.carta-fecha {
+  font-family:'Helvetica Neue',sans-serif;
+  font-size:10.5px;
+  color:#b08060;
+  letter-spacing:0.1em;
+  text-align:right;
+  margin-bottom:22px;
+  text-transform:uppercase;
+}
+
+.carta-saludo {
+  font-family:'Georgia',serif;
+  font-style:italic;
+  font-size:20px;
+  color:#2a1005;
+  margin-bottom:18px;
+  line-height:1.3;
+}
+
+.carta-body {
+  font-family:'Georgia',serif;
+  font-size:14.5px;
+  line-height:1.85;
+  color:#3a1f0a;
+}
+.carta-body p { margin-bottom:14px; }
+
+.divider {
+  text-align:center;
+  margin:16px 0;
+  color:#c0392b;
+  font-size:13px;
+  letter-spacing:8px;
+}
+
+.carta-cierre {
+  font-family:'Georgia',serif;
+  font-style:italic;
+  font-size:16px;
+  color:#2a1005;
+  text-align:right;
+  margin-top:20px;
+  line-height:1.7;
+}
+
+.carta-pd {
+  font-family:'Helvetica Neue',sans-serif;
+  font-size:11.5px;
+  color:#b08060;
+  margin-top:16px;
+  font-style:italic;
+  line-height:1.6;
+}
+</style>
+</head>
+<body>
+
+<!-- Stars background -->
+<div class="stars" id="stars"></div>
+
+<!-- Petals -->
+<div id="petals"></div>
+
+<p class="intro">· una carta para ti ·</p>
+
+<div class="envelope-wrap" id="env" onclick="abrirSobre()">
+  <div class="envelope-body">
+    <div class="fold-left"></div>
+    <div class="fold-right"></div>
+    <div class="fold-bottom"></div>
+
+    <div class="letter-preview">
+      <div class="letter-preview-lines">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <!-- Flap con SVG -->
+    <div class="env-flap">
+      <svg width="300" height="110" viewBox="0 0 300 110" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="flapGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#ffe0b0;stop-opacity:1"/>
+            <stop offset="100%" style="stop-color:#f5c88a;stop-opacity:1"/>
+          </linearGradient>
+        </defs>
+        <polygon points="0,0 300,0 150,110" fill="url(#flapGrad)"/>
+        <line x1="0" y1="0" x2="150" y2="110" stroke="#c89060" stroke-width="1" opacity="0.5"/>
+        <line x1="300" y1="0" x2="150" y2="110" stroke="#c89060" stroke-width="1" opacity="0.5"/>
+      </svg>
+    </div>
+
+    <div class="wax-seal">♥</div>
+  </div>
+</div>
+
+<p class="hint" id="hint">· toca para abrir ·</p>
+
+<!-- Modal carta -->
+<div class="modal-bg" id="modal" onclick="cerrarSiAfuera(event)">
+  <div class="carta">
+    <button class="close-btn" onclick="cerrarModal()">×</button>
+
+    <div class="carta-fecha">Monterrey, Marzo 2026</div>
+
+    <div class="carta-saludo">Fernanda,</div>
+
+    <div class="carta-body">
+      <p>
+        No sé bien cómo empezar esto, así que lo digo directo: pienso en ti más de lo que quisiera admitir.
+      </p>
+
+      <div class="divider">♡ ♡ ♡</div>
+
+      <p>
+        Guadalajara y Monterrey no están tan lejos en el mapa, pero a veces sí se sienten así. Hay momentos en que quisiera estar ahí, en tu ciudad, tomar un café contigo sin prisa, sin contar las horas antes de volver.
+      </p>
+
+      <p>
+        Pero hay algo que la distancia no puede: quitarme las ganas. Y esas siguen enteras. Cuando hablo contigo el día se siente diferente. Cuando no hablo contigo también me lo recuerda.
+      </p>
+
+      <div class="divider">—</div>
+
+      <p>
+        Me gusta que lo estamos intentando. Que te cuento cosas que normalmente no le cuento a nadie. Que cuando algo me da risa, tú eres la primera persona a la que se la quiero contar.
+      </p>
+
+      <p>
+        Así que esto es para recordarte que en este lado del país hay alguien que te tiene en la cabeza, y que cuando pueda estará del otro.
+      </p>
+    </div>
+
+    <div class="carta-cierre">
+      Con todo,<br>
+      <strong>Rodrigo</strong>
+    </div>
+
+    <div class="carta-pd">
+      P.D. — Ya sé que Guadalajara tiene mejor clima. No te lo voy a discutir.
+    </div>
+  </div>
+</div>
+
+<script>
+// Stars
+(function(){
+  var s=document.getElementById('stars');
+  for(var i=0;i<80;i++){
+    var el=document.createElement('div');
+    el.className='star';
+    el.style.cssText='left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;'
+      +'--d:'+(2+Math.random()*5)+'s;'
+      +'--o:'+(0.3+Math.random()*0.7)+';'
+      +'animation-delay:'+(Math.random()*5)+'s;'
+      +(Math.random()>0.7?'width:3px;height:3px':'');
+    s.appendChild(el);
+  }
+})();
+
+// Petals
+(function(){
+  var emojis=['🌸','🌺','🌹','💮'];
+  for(var i=0;i<12;i++){
+    var el=document.createElement('div');
+    el.className='petal';
+    el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    el.style.cssText='left:'+Math.random()*100+'%;'
+      +'--pd:'+(6+Math.random()*10)+'s;'
+      +'animation-delay:'+(Math.random()*10)+'s;';
+    document.getElementById('petals').appendChild(el);
+  }
+})();
+
+var opened=false;
+
+function abrirSobre(){
+  if(opened) return;
+  opened=true;
+  document.getElementById('env').classList.add('open');
+  document.getElementById('hint').style.opacity='0';
+  setTimeout(function(){
+    document.getElementById('modal').classList.add('show');
+  },900);
+}
+
+function cerrarModal(){
+  document.getElementById('modal').classList.remove('show');
+  setTimeout(function(){
+    document.getElementById('env').classList.remove('open');
+    document.getElementById('hint').style.opacity='1';
+    opened=false;
+  },400);
+}
+
+function cerrarSiAfuera(e){
+  if(e.target===document.getElementById('modal')) cerrarModal();
+}
+</script>
+</body>
+</html>
